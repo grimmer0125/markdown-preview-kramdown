@@ -1,4 +1,4 @@
-# Atom package -  Markdown Preview Kramdown
+# Atom package -  Markdown Preview Kramdown (In development) 
 
 Since different Markdown implementation will differ a little, I make this package to let people preview the articles on GitHub on Atom. It is modified from [Markdown Preview](https://github.com/atom/markdown-preview)  
 
@@ -19,7 +19,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Add other types of Markdown support. 
 - [ ] Automaticall install the needed kramdown library.
-- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Such as Fenced code blocks & Syntax highlighting. Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks) 
+- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks). GitHub Pages use Kmarkdown + Fenced Code Block(```) and Syntax highlighting of GitHub Flavored Markdown instead of those in Kramdown. 
 
 ## Other ways to preview the articles on GitHub Pages 
 1. Run Local Jekyll
