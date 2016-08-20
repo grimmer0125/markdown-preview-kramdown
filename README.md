@@ -1,6 +1,6 @@
 # Atom package -  Markdown Preview Kramdown
 
-Since different Markdown implementation will differ a little, I make this package to let people check the articles on GitHub on Atom.   
+Since different Markdown implementation will differ a little, I make this package to let people preview the articles on GitHub on Atom.   
 
 Show the rendered HTML markdown to the right of the current editor using <kbd>ctrl-shift-m</kbd>.
 
@@ -19,3 +19,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Add other types of Markdown support. 
 
+## Other ways to preview the articles GitHub Pages 
+1. Run Local Jekyll
+2. Paste markdown to https://trykramdown.herokuapp.com/
+3. Paste markdown to https://kramdown.herokuapp.com/
