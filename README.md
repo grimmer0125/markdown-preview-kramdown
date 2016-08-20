@@ -1,6 +1,6 @@
 # Atom package -  Markdown Preview Kramdown (In development) 
 
-Since different Markdown implementation will differ a little, I make this package to let people preview the articles on GitHub on Atom. It is modified from [Markdown Preview](https://github.com/atom/markdown-preview)  
+Since different Markdown implementation will output differetn HTML sometimes, I make this package to let people preview the articles on GitHub on Atom. It is modified from [Markdown Preview](https://github.com/atom/markdown-preview)  
 
 Show the rendered HTML markdown to the right of the current editor using <kbd>ctrl-shift-m</kbd>.
 
