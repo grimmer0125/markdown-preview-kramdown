@@ -1,5 +1,6 @@
-# Markdown Preview package
-[![OS X Build Status](https://travis-ci.org/atom/markdown-preview.svg?branch=master)](https://travis-ci.org/atom/markdown-preview) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/bvh0evhh4v6w9b29/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/markdown-preview/branch/master) [![Dependency Status](https://david-dm.org/atom/markdown-preview.svg)](https://david-dm.org/atom/markdown-preview)
+# Markdown Preview Kramdown package
+
+Since different Markdown implementation will differ a little, I make this package to let people check the articles on GitHub on Atom.   
 
 Show the rendered HTML markdown to the right of the current editor using <kbd>ctrl-shift-m</kbd>.
 
@@ -7,20 +8,14 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 
 ![markdown-preview](https://cloud.githubusercontent.com/assets/378023/10013086/24cad23e-6149-11e5-90e6-663009210218.png)
 
-## Customize
+## Install
 
-By default Markdown Preview uses the colors of the active syntax theme. Enable
+1. You need to install kramdown library first. Follow the instruction, http://kramdown.gettalong.org/installation.html. 
+2. Install this atom package. 
 
-- [x] Use GitHub.com style
+## To-do List 
 
-in the __package settings__ to make it look closer to how markdown files get rendered on github.com.
+- [ ] Ignore the Front Matter of Jekyll.
+- [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
+- [ ] Add other types of Markdown support. 
 
-![markdown-preview GitHub style](https://cloud.githubusercontent.com/assets/378023/10013087/24ccc7ec-6149-11e5-97ea-53a842a715ea.png)
-
-To customize even further, the styling can be overridden in your `styles.less` file. For example:
-
-```css
-.markdown-preview.markdown-preview {
-  background-color: #444;
-}
-```
