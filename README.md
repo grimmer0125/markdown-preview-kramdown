@@ -19,7 +19,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Add other types of Markdown support. 
 - [ ] Automaticall install the needed kramdown library.
-- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Such as Fenced code blocks & Syntax highlighting. 
+- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Such as Fenced code blocks & Syntax highlighting. Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks) 
 
 ## Other ways to preview the articles on GitHub Pages 
 1. Run Local Jekyll
