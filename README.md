@@ -1,4 +1,4 @@
-# Markdown Preview Kramdown package
+# Atom package -  Markdown Preview Kramdown
 
 Since different Markdown implementation will differ a little, I make this package to let people check the articles on GitHub on Atom.   
 
