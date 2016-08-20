@@ -7,7 +7,6 @@ Highlights = require 'highlights'
 roaster = null # Defer until used
 {scopeForFenceName} = require './extension-helper'
 
-{spawnSync} = require 'child_process'
 {BufferedProcess} = require 'atom'
 
 highlighter = null
