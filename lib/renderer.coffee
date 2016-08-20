@@ -93,9 +93,7 @@ render = (text, filePath, callback) ->
   #   html = resolveImagePaths(html, filePath)
   #   callback(null, html.trim())
 
-  process = new BufferedProcess({command, args, stdout, stderr, exit})
-
-  console.log 'after BufferedProcess!'
+  process = new BufferedProcess({command, args, stdout, stderr})
 
 sanitize = (html) ->
   o = cheerio.load(html)
