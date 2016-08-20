@@ -1,9 +1,9 @@
 {
-  "name": "markdown-preview",
+  "name": "markdown-preview-kramdown",
   "version": "0.158.1",
   "main": "./lib/main",
   "description": "Open a rendered version of the Markdown in the current editor with `ctrl-shift-m`.",
-  "repository": "https://github.com/atom/markdown-preview",
+  "repository": "https://github.com/grimmer0125/markdown-preview-kramdown",
   "license": "MIT",
   "engines": {
     "atom": "*"

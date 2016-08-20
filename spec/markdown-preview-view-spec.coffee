@@ -18,7 +18,7 @@ describe "MarkdownPreviewView", ->
       atom.packages.activatePackage('language-javascript')
 
     waitsForPromise ->
-      atom.packages.activatePackage('markdown-preview')
+      atom.packages.activatePackage('markdown-preview-kramdown')
 
   afterEach ->
     preview.destroy()
@@ -154,7 +154,7 @@ describe "MarkdownPreviewView", ->
   describe "gfm newlines", ->
     describe "when gfm newlines are not enabled", ->
       it "creates a single paragraph with <br>", ->
-        atom.config.set('markdown-preview.breakOnSingleNewline', false)
+        atom.config.set('markdown-preview-kramdown.breakOnSingleNewline', false)
 
         waitsForPromise ->
           preview.renderMarkdown()
@@ -164,7 +164,7 @@ describe "MarkdownPreviewView", ->
 
     describe "when gfm newlines are enabled", ->
       it "creates a single paragraph with no <br>", ->
-        atom.config.set('markdown-preview.breakOnSingleNewline', true)
+        atom.config.set('markdown-preview-kramdown.breakOnSingleNewline', true)
 
         waitsForPromise ->
           preview.renderMarkdown()
@@ -206,7 +206,7 @@ describe "MarkdownPreviewView", ->
       atomTextEditorStyles = [
         "atom-text-editor .line { color: brown; }\natom-text-editor .number { color: cyan; }"
         "atom-text-editor :host .something { color: black; }"
-        "atom-text-editor .hr { background: url(atom://markdown-preview/assets/hr.png); }"
+        "atom-text-editor .hr { background: url(atom://markdown-preview-kramdown/assets/hr.png); }"
       ]
 
       expect(fs.isFileSync(outputPath)).toBe false

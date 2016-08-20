@@ -93,13 +93,13 @@ class MarkdownPreviewView extends ScrollView
         @saveAs()
       'core:copy': (event) =>
         event.stopPropagation() if @copyToClipboard()
-      'markdown-preview:zoom-in': =>
+      'markdown-preview-kramdown:zoom-in': =>
         zoomLevel = parseFloat(@css('zoom')) or 1
         @css('zoom', zoomLevel + .1)
-      'markdown-preview:zoom-out': =>
+      'markdown-preview-kramdown:zoom-out': =>
         zoomLevel = parseFloat(@css('zoom')) or 1
         @css('zoom', zoomLevel - .1)
-      'markdown-preview:reset-zoom': =>
+      'markdown-preview-kramdown:reset-zoom': =>
         @css('zoom', 1)
 
     changeHandler = =>
@@ -114,16 +114,16 @@ class MarkdownPreviewView extends ScrollView
       @disposables.add @file.onDidChange(changeHandler)
     else if @editor?
       @disposables.add @editor.getBuffer().onDidStopChanging ->
-        changeHandler() if atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() if atom.config.get 'markdown-preview-kramdown.liveUpdate'
       @disposables.add @editor.onDidChangePath => @emitter.emit 'did-change-title'
       @disposables.add @editor.getBuffer().onDidSave ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-preview-kramdown.liveUpdate'
       @disposables.add @editor.getBuffer().onDidReload ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-preview-kramdown.liveUpdate'
 
-    @disposables.add atom.config.onDidChange 'markdown-preview.breakOnSingleNewline', changeHandler
+    @disposables.add atom.config.onDidChange 'markdown-preview-kramdown.breakOnSingleNewline', changeHandler
 
-    @disposables.add atom.config.observe 'markdown-preview.useGitHubStyle', (useGitHubStyle) =>
+    @disposables.add atom.config.observe 'markdown-preview-kramdown.useGitHubStyle', (useGitHubStyle) =>
       if useGitHubStyle
         @element.setAttribute('data-use-github-style', '')
       else
@@ -156,7 +156,7 @@ class MarkdownPreviewView extends ScrollView
         @loaded = true
         @html(domFragment)
         @emitter.emit 'did-change-markdown'
-        @originalTrigger('markdown-preview:markdown-changed')
+        @originalTrigger('markdown-preview-kramdown:markdown-changed')
 
   getTitle: ->
     if @file?
@@ -171,9 +171,9 @@ class MarkdownPreviewView extends ScrollView
 
   getURI: ->
     if @file?
-      "markdown-preview://#{@getPath()}"
+      "markdown-preview-kramdown://#{@getPath()}"
     else
-      "markdown-preview://editor/#{@editorId}"
+      "markdown-preview-kramdown://editor/#{@editorId}"
 
   getPath: ->
     if @file?
@@ -288,6 +288,6 @@ class MarkdownPreviewView extends ScrollView
 
 if Grim.includeDeprecatedAPIs
   MarkdownPreviewView::on = (eventName) ->
-    if eventName is 'markdown-preview:markdown-changed'
-      Grim.deprecate("Use MarkdownPreviewView::onDidChangeMarkdown instead of the 'markdown-preview:markdown-changed' jQuery event")
+    if eventName is 'markdown-preview-kramdown:markdown-changed'
+      Grim.deprecate("Use MarkdownPreviewView::onDidChangeMarkdown instead of the 'markdown-preview-kramdown:markdown-changed' jQuery event")
     super
