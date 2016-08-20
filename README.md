@@ -18,6 +18,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Ignore the Front Matter of Jekyll.
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Add other types of Markdown support. 
+- [ ] Automaticall install the needed kramdown library. 
 
 ## Other ways to preview the articles GitHub Pages 
 1. Run Local Jekyll
