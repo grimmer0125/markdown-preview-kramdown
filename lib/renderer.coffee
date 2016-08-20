@@ -36,6 +36,8 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
 
 render = (text, filePath, callback) ->
   command = null
+  content = null
+  error = null
 
   # original markdown:
   # roaster ?= require 'roaster'
@@ -67,12 +69,15 @@ render = (text, filePath, callback) ->
     # console.log("output:", html)
     html = sanitize(html)
     html = resolveImagePaths(html, filePath)
+    content = html
     callback(null, html.trim())
 
   stderr = (err) ->
     console.log("err:", err)
-    # sometimes it will be undefined, then will happen exception for line 79
-    return callback(err)
+    error = err
+
+    if error and !content
+      callback(err)
 
   exit = (code) ->
     console.log("exit:", code)
