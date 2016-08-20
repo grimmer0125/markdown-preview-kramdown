@@ -18,9 +18,15 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Ignore the Front Matter of Jekyll.
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Automaticall install the needed kramdown library.
-- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks). GitHub Pages use Kmarkdown + Fenced Code Block(```) and Syntax highlighting of GitHub Flavored Markdown instead of those in Kramdown. They both support non fenced code block (4 indent type) and single line code span.   
+- [ ] Debug and Add back syntax highlight.  
 
 ## Other ways to preview the articles on GitHub Pages 
 1. Run Local Jekyll
 2. Paste markdown to https://trykramdown.herokuapp.com/
 3. Paste markdown to https://kramdown.herokuapp.com/
+
+## About Fenced code block
+1. [Syntax highlighting of GitHub Flavored Markdown ](https://help.github.com/articles/creating-and-highlighting-code-blocks/). It uses ```
+2. [Fenced code block of Kramdown](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks). It uses ~~~.
+
+GitHub Pages and some/all markdown files on GitHub can accept these two types and show correctly. But this atom package only handles Kramdown type(~~~). Please keep in mind, and my opinion is to use ~~~. Also They both support non-fenced standard code block (4 indent) and single line code span.   
