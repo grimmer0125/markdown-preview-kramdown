@@ -36,7 +36,6 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
     callback(null, html)
 
 render = (text, filePath, callback) ->
-  console.log("passed filepath:", filePath)
   command = null
 
   # original markdown:
@@ -53,22 +52,20 @@ render = (text, filePath, callback) ->
   # file = editor?.buffer.file
   # filePath = file?.path
 
-  # if true , for testing
   if !filePath
-    console.log 'can not get file path, may be unsaved file'
+    console.log 'empty file path, may be unsaved file'
     command = 'ruby'
     filePath = atom.packages.getPackageDirPaths() + "/markdown-preview-kramdown/lib/kramHelper.rb"
-    console.log("package script path:", filePath)
-    args = [filePath, text]
-    # todo: will finish the workaround way later
-    # return
+    # console.log("package script path:", filePath)
+    args = ["--external-encoding", "UTF-8", "-S", filePath, text]
+    # this workaround way, specify UTF-8, is from https://github.com/gettalong/kramdown/issues/38
   else
-    command = 'kramdown'
-    console.log("filepath:", filePath)
-    args = [filePath]
+    command = 'ruby'
+    # console.log("filepath:", filePath)
+    args = ["--external-encoding", "UTF-8", "-S", "kramdown", filePath]
 
   stdout = (html) ->
-    console.log("output:", html)
+    # console.log("output:", html)
     html = sanitize(html)
     html = resolveImagePaths(html, filePath)
     callback(null, html.trim())
@@ -76,7 +73,7 @@ render = (text, filePath, callback) ->
   stderr = (err) ->
     console.log("err:", err)
     # sometimes it will be undefined, then will happen exception for line 79
-    return callback(error)
+    return callback(err)
 
   exit = (code) ->
     console.log("exit:", code)
