@@ -7,6 +7,9 @@ Highlights = require 'highlights'
 roaster = null # Defer until used
 {scopeForFenceName} = require './extension-helper'
 
+{spawnSync} = require 'child_process'
+{BufferedProcess} = require 'atom'
+
 highlighter = null
 {resourcePath} = atom.getLoadSettings()
 packagePath = path.dirname(__dirname)
@@ -33,21 +36,65 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
     callback(null, html)
 
 render = (text, filePath, callback) ->
-  roaster ?= require 'roaster'
-  options =
-    sanitize: false
-    breaks: atom.config.get('markdown-preview-kramdown.breakOnSingleNewline')
+  console.log("passed filepath:", filePath)
+  command = null
+
+  # original markdown:
+  # roaster ?= require 'roaster'
+  # options =
+  #   sanitize: false
+  #   breaks: atom.config.get('markdown-preview-kramdown.breakOnSingleNewline')
 
   # Remove the <!doctype> since otherwise marked will escape it
   # https://github.com/chjj/marked/issues/354
   text = text.replace(/^\s*<!doctype(\s+.*)?>\s*/i, '')
 
-  roaster text, options, (error, html) ->
-    return callback(error) if error?
+  # editor = atom.workspace.getActiveTextEditor() or getActivePaneItem
+  # file = editor?.buffer.file
+  # filePath = file?.path
 
+  # if true , for testing
+  if !filePath
+    console.log 'can not get file path, may be unsaved file'
+    command = 'ruby'
+    filePath = atom.packages.getPackageDirPaths() + "/markdown-preview-kramdown/lib/kramHelper.rb"
+    console.log("package script path:", filePath)
+    args = [filePath, text]
+    # todo: will finish the workaround way later
+    # return
+  else
+    command = 'kramdown'
+    console.log("filepath:", filePath)
+    args = [filePath]
+
+  stdout = (html) ->
+    console.log("output:", html)
     html = sanitize(html)
     html = resolveImagePaths(html, filePath)
     callback(null, html.trim())
+
+  stderr = (err) ->
+    console.log("err:", err)
+    # sometimes it will be undefined, then will happen exception for line 79
+    return callback(error)
+
+  exit = (code) ->
+    console.log("exit:", code)
+
+  # roaster text, options, (error, html) ->
+  #   console.log 'redner 2.5-1:'
+  #   console.log html
+  #   return callback(error) if error?
+  #
+  #   console.log 'redner 2.5-2!'
+  #
+  #   html = sanitize(html)
+  #   html = resolveImagePaths(html, filePath)
+  #   callback(null, html.trim())
+
+  process = new BufferedProcess({command, args, stdout, stderr, exit})
+
+  console.log 'after BufferedProcess!'
 
 sanitize = (html) ->
   o = cheerio.load(html)
