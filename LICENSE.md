@@ -1,4 +1,5 @@
-Copyright (c) 2014 GitHub Inc.
+Original work Copyright (c) 2014 GitHub Inc.
+Modified work Copyright 2016 Grimmer Kang
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
