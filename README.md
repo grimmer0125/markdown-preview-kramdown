@@ -18,7 +18,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Ignore the Front Matter of Jekyll.
 - [ ] Other encoding check/support. Now it supports ASCII and UTF-8, and other encoding needed to added. 
 - [ ] Automaticall install the needed kramdown library.
-- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks). GitHub Pages use Kmarkdown + Fenced Code Block(```) and Syntax highlighting of GitHub Flavored Markdown instead of those in Kramdown. They both support non fenced code block (4 indent type) and single line code span (```` `test`  ````).   
+- [ ] [More GitHub Flavored Markdown support](https://help.github.com/articles/creating-and-highlighting-code-blocks/). Kramdown uses ~~~ for its [Fenced code block](http://kramdown.gettalong.org/syntax.html#fenced-code-blocks). GitHub Pages use Kmarkdown + Fenced Code Block(```) and Syntax highlighting of GitHub Flavored Markdown instead of those in Kramdown. They both support non fenced code block (4 indent type) and single line code span.   
 
 ## Other ways to preview the articles on GitHub Pages 
 1. Run Local Jekyll
