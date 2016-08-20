@@ -20,7 +20,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 - [ ] Add other types of Markdown support. 
 - [ ] Automaticall install the needed kramdown library. 
 
-## Other ways to preview the articles GitHub Pages 
+## Other ways to preview the articles on GitHub Pages 
 1. Run Local Jekyll
 2. Paste markdown to https://trykramdown.herokuapp.com/
 3. Paste markdown to https://kramdown.herokuapp.com/
