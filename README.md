@@ -12,6 +12,7 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 
 1. You need to install kramdown library first. Follow the instruction, http://kramdown.gettalong.org/installation.html. 
 2. Install this atom package. 
+3. (Optional) You may disable the default built-in Markdown-Preview to avoid confusion on shortcuts. They use the same shortcuts and this package will override those in Mark-Preview.   
 
 ## To-do List 
 
