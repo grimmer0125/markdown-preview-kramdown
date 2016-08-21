@@ -1,6 +1,6 @@
 {
   "name": "markdown-preview-kramdown",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "./lib/main",
   "description": "Kramdown (used by GitHub Pages) version of Markdown Preview",
   "repository": "https://github.com/grimmer0125/markdown-preview-kramdown",
