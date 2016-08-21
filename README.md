@@ -34,3 +34,5 @@ GitHub Pages and some/all markdown files on GitHub can accept these two types an
 ## License
 
 Markdown Preview Kramdown is released under the [MIT license][license].
+
+[license]: LICENSE.md
