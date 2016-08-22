@@ -32,6 +32,9 @@ It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.r
 
 GitHub Pages and some/all markdown files on GitHub can accept these two types and show correctly. But this atom package only handles Kramdown type(~~~). Please keep in mind, and my opinion is to use ~~~. Also They both support non-fenced standard code block (indented 4 spaces) and single line code span.   
 
+## About Kramdown
+According [https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0](https://github.com/blog/2100-github-pages-now-faster-and-simpler-with-jekyll-3-0), *Starting May 1st, 2016, GitHub Pages will only support kramdown, Jekyll's default Markdown engine.*
+
 ## License
 
 Markdown Preview Kramdown is released under the [MIT license][license].
