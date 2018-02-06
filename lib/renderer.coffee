@@ -6,6 +6,8 @@ Highlights = require 'highlights'
 roaster = null # Defer until used
 {scopeForFenceName} = require './extension-helper'
 
+{BufferedProcess} = require 'atom'
+
 highlighter = null
 {resourcePath} = atom.getLoadSettings()
 packagePath = path.dirname(__dirname)
@@ -32,21 +34,67 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
     callback(null, html)
 
 render = (text, filePath, callback) ->
-  roaster ?= require 'roaster'
-  options =
-    sanitize: false
-    breaks: atom.config.get('markdown-preview.breakOnSingleNewline')
+  command = null
+  content = null
+  error = null
+
+  # original markdown:
+  # roaster ?= require 'roaster'
+  # options =
+  #   sanitize: false
+  #   breaks: atom.config.get('markdown-preview-kramdown.breakOnSingleNewline')
 
   # Remove the <!doctype> since otherwise marked will escape it
   # https://github.com/chjj/marked/issues/354
   text = text.replace(/^\s*<!doctype(\s+.*)?>\s*/i, '')
 
-  roaster text, options, (error, html) ->
-    return callback(error) if error?
+  # editor = atom.workspace.getActiveTextEditor() or getActivePaneItem
+  # file = editor?.buffer.file
+  # filePath = file?.path
 
-    html = createDOMPurify().sanitize(html, {ALLOW_UNKNOWN_PROTOCOLS: atom.config.get('markdown-preview.allowUnsafeProtocols')})
+  if !filePath
+    console.log 'empty file path, may be unsaved file'
+    command = 'ruby'
+    filePath = atom.packages.getPackageDirPaths() + "/markdown-preview-kramdown/lib/kramHelper.rb"
+    # console.log("package script path:", filePath)
+    args = ["--external-encoding", "UTF-8", "-S", filePath, text]
+    # this workaround way, specify UTF-8, is from https://github.com/gettalong/kramdown/issues/38
+  else
+    command = 'ruby'
+    # console.log("filepath:", filePath)
+    args = ["--external-encoding", "UTF-8", "-S", "kramdown", filePath]
+
+  stdout = (html) ->
+    # console.log("output:", html)
+    # html = sanitize(html)
+    html = createDOMPurify().sanitize(html, {ALLOW_UNKNOWN_PROTOCOLS: atom.config.get('markdown-preview-kramdown.allowUnsafeProtocols')})
+
     html = resolveImagePaths(html, filePath)
+    content = html
     callback(null, html.trim())
+
+  stderr = (err) ->
+    console.log("err:", err)
+    error = err
+
+    if error and !content
+      callback(err)
+
+  exit = (code) ->
+    console.log("exit:", code)
+
+  # roaster text, options, (error, html) ->
+  #   console.log 'redner 2.5-1:'
+  #   console.log html
+  #   return callback(error) if error?
+  #
+  #   console.log 'redner 2.5-2!'
+  #
+  #   html = sanitize(html)
+  #   html = resolveImagePaths(html, filePath)
+  #   callback(null, html.trim())
+
+  process = new BufferedProcess({command, args, stdout, stderr})
 
 resolveImagePaths = (html, filePath) ->
   [rootDirectory] = atom.project.relativizePath(filePath)
