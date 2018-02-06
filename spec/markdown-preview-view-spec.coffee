@@ -2,7 +2,7 @@ path = require 'path'
 fs = require 'fs-plus'
 temp = require('temp').track()
 url = require 'url'
-MarkdownPreviewView = require '../lib/markdown-preview-view'
+MarkdownPreviewView = require '../lib/markdown-preview-kramdown-view'
 
 describe "MarkdownPreviewView", ->
   preview = null
@@ -24,7 +24,7 @@ describe "MarkdownPreviewView", ->
       atom.packages.activatePackage('language-javascript')
 
     waitsForPromise ->
-      atom.packages.activatePackage('markdown-preview')
+      atom.packages.activatePackage('markdown-preview-kramdown')
 
   afterEach ->
     preview.destroy()
@@ -71,7 +71,7 @@ describe "MarkdownPreviewView", ->
       expect(newPreview.getPath()).toBe preview.getPath()
 
     it "does not recreate a preview when the file no longer exists", ->
-      filePath = path.join(temp.mkdirSync('markdown-preview-'), 'foo.md')
+      filePath = path.join(temp.mkdirSync('markdown-preview-kramdown-'), 'foo.md')
       fs.writeFileSync(filePath, '# Hi')
 
       preview.destroy()
@@ -194,7 +194,7 @@ describe "MarkdownPreviewView", ->
       it "doesn't change the URL when allowUnsafeProtocols is true", ->
         preview.destroy()
 
-        atom.config.set('markdown-preview.allowUnsafeProtocols', true)
+        atom.config.set('markdown-preview-kramdown.allowUnsafeProtocols', true)
 
         filePath = path.join(temp.mkdirSync('atom'), 'foo.md')
         fs.writeFileSync(filePath, "![absolute](#{filePath})")
@@ -210,7 +210,7 @@ describe "MarkdownPreviewView", ->
     it "removes the URL when allowUnsafeProtocols is false", ->
       preview.destroy()
 
-      atom.config.set('markdown-preview.allowUnsafeProtocols', false)
+      atom.config.set('markdown-preview-kramdown.allowUnsafeProtocols', false)
 
       filePath = path.join(temp.mkdirSync('atom'), 'foo.md')
       fs.writeFileSync(filePath, "![absolute](#{filePath})")
@@ -232,7 +232,7 @@ describe "MarkdownPreviewView", ->
   describe "gfm newlines", ->
     describe "when gfm newlines are not enabled", ->
       it "creates a single paragraph with <br>", ->
-        atom.config.set('markdown-preview.breakOnSingleNewline', false)
+        atom.config.set('markdown-preview-kramdown.breakOnSingleNewline', false)
 
         waitsForPromise ->
           preview.renderMarkdown()
@@ -242,7 +242,7 @@ describe "MarkdownPreviewView", ->
 
     describe "when gfm newlines are enabled", ->
       it "creates a single paragraph with no <br>", ->
-        atom.config.set('markdown-preview.breakOnSingleNewline', true)
+        atom.config.set('markdown-preview-kramdown.breakOnSingleNewline', true)
 
         waitsForPromise ->
           preview.renderMarkdown()
@@ -290,12 +290,12 @@ describe "MarkdownPreviewView", ->
       markdownPreviewStyles = [
         {
           rules: [
-            createRule ".markdown-preview", "{ color: orange; }"
+            createRule ".markdown-preview-kramdown", "{ color: orange; }"
           ]
         }, {
           rules: [
             createRule ".not-included", "{ color: green; }"
-            createRule ".markdown-preview :host", "{ color: purple; }"
+            createRule ".markdown-preview-kramdown :host", "{ color: purple; }"
           ]
         }
       ]
@@ -303,7 +303,7 @@ describe "MarkdownPreviewView", ->
       atomTextEditorStyles = [
         "atom-text-editor .line { color: brown; }\natom-text-editor .number { color: cyan; }"
         "atom-text-editor :host .something { color: black; }"
-        "atom-text-editor .hr { background: url(atom://markdown-preview/assets/hr.png); }"
+        "atom-text-editor .hr { background: url(atom://markdown-preview-kramdown/assets/hr.png); }"
       ]
 
       expect(fs.isFileSync(outputPath)).toBe false
@@ -403,7 +403,7 @@ describe "MarkdownPreviewView", ->
           enc
         '''
 
-  describe "when markdown-preview:select-all is triggered", ->
+  describe "when markdown-preview-kramdown:select-all is triggered", ->
     it "selects the entire Markdown preview", ->
       filePath = atom.project.getDirectories()[0].resolve('subdir/code-block.md')
       preview2 = new MarkdownPreviewView({filePath})
@@ -413,7 +413,7 @@ describe "MarkdownPreviewView", ->
         preview.renderMarkdown()
 
       runs ->
-        atom.commands.dispatch(preview.element, 'markdown-preview:select-all')
+        atom.commands.dispatch(preview.element, 'markdown-preview-kramdown:select-all')
         {commonAncestorContainer} = window.getSelection().getRangeAt(0)
         expect(commonAncestorContainer).toEqual preview.element
 
@@ -421,13 +421,13 @@ describe "MarkdownPreviewView", ->
         preview2.renderMarkdown()
 
       runs ->
-        atom.commands.dispatch(preview2.element, 'markdown-preview:select-all')
+        atom.commands.dispatch(preview2.element, 'markdown-preview-kramdown:select-all')
         selection = window.getSelection()
         expect(selection.rangeCount).toBe 1
         {commonAncestorContainer} = selection.getRangeAt(0)
         expect(commonAncestorContainer).toEqual preview2.element
 
-  describe "when markdown-preview:zoom-in or markdown-preview:zoom-out are triggered", ->
+  describe "when markdown-preview-kramdown:zoom-in or markdown-preview-kramdown:zoom-out are triggered", ->
     it "increases or decreases the zoom level of the markdown preview element", ->
       jasmine.attachToDOM(preview.element)
 
@@ -436,7 +436,7 @@ describe "MarkdownPreviewView", ->
 
       runs ->
         originalZoomLevel = getComputedStyle(preview.element).zoom
-        atom.commands.dispatch(preview.element, 'markdown-preview:zoom-in')
+        atom.commands.dispatch(preview.element, 'markdown-preview-kramdown:zoom-in')
         expect(getComputedStyle(preview.element).zoom).toBeGreaterThan(originalZoomLevel)
-        atom.commands.dispatch(preview.element, 'markdown-preview:zoom-out')
+        atom.commands.dispatch(preview.element, 'markdown-preview-kramdown:zoom-out')
         expect(getComputedStyle(preview.element).zoom).toBe(originalZoomLevel)

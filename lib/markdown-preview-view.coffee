@@ -13,7 +13,7 @@ class MarkdownPreviewView
 
   constructor: ({@editorId, @filePath}) ->
     @element = document.createElement('div')
-    @element.classList.add('markdown-preview')
+    @element.classList.add('markdown-preview-kramdown')
     @element.tabIndex = -1
     @emitter = new Emitter
     @loaded = false
@@ -114,21 +114,21 @@ class MarkdownPreviewView
       'core:copy': (event) =>
         event.stopPropagation()
         @copyToClipboard()
-      'markdown-preview:select-all': =>
+      'markdown-preview-kramdown:select-all': =>
         @selectAll()
-      'markdown-preview:zoom-in': =>
+      'markdown-preview-kramdown:zoom-in': =>
         zoomLevel = parseFloat(getComputedStyle(@element).zoom)
         @element.style.zoom = zoomLevel + 0.1
-      'markdown-preview:zoom-out': =>
+      'markdown-preview-kramdown:zoom-out': =>
         zoomLevel = parseFloat(getComputedStyle(@element).zoom)
         @element.style.zoom = zoomLevel - 0.1
-      'markdown-preview:reset-zoom': =>
+      'markdown-preview-kramdown:reset-zoom': =>
         @element.style.zoom = 1
-      'markdown-preview:toggle-break-on-single-newline': ->
-        keyPath = 'markdown-preview.breakOnSingleNewline'
+      'markdown-preview-kramdown:toggle-break-on-single-newline': ->
+        keyPath = 'markdown-preview-kramdown.breakOnSingleNewline'
         atom.config.set(keyPath, not atom.config.get(keyPath))
-      'markdown-preview:toggle-github-style': ->
-        keyPath = 'markdown-preview.useGitHubStyle'
+      'markdown-preview-kramdown:toggle-github-style': ->
+        keyPath = 'markdown-preview-kramdown.useGitHubStyle'
         atom.config.set(keyPath, not atom.config.get(keyPath))
 
     changeHandler = =>
@@ -142,16 +142,16 @@ class MarkdownPreviewView
       @disposables.add @file.onDidChange(changeHandler)
     else if @editor?
       @disposables.add @editor.getBuffer().onDidStopChanging ->
-        changeHandler() if atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() if atom.config.get 'markdown-preview-kramdown.liveUpdate'
       @disposables.add @editor.onDidChangePath => @emitter.emit 'did-change-title'
       @disposables.add @editor.getBuffer().onDidSave ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-preview-kramdown.liveUpdate'
       @disposables.add @editor.getBuffer().onDidReload ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-preview-kramdown.liveUpdate'
 
-    @disposables.add atom.config.onDidChange 'markdown-preview.breakOnSingleNewline', changeHandler
+    @disposables.add atom.config.onDidChange 'markdown-preview-kramdown.breakOnSingleNewline', changeHandler
 
-    @disposables.add atom.config.observe 'markdown-preview.useGitHubStyle', (useGitHubStyle) =>
+    @disposables.add atom.config.observe 'markdown-preview-kramdown.useGitHubStyle', (useGitHubStyle) =>
       if useGitHubStyle
         @element.setAttribute('data-use-github-style', '')
       else
@@ -217,9 +217,9 @@ class MarkdownPreviewView
 
   getURI: ->
     if @file?
-      "markdown-preview://#{@getPath()}"
+      "markdown-preview-kramdown://#{@getPath()}"
     else
-      "markdown-preview://editor/#{@editorId}"
+      "markdown-preview-kramdown://editor/#{@editorId}"
 
   getPath: ->
     if @file?
@@ -245,8 +245,8 @@ class MarkdownPreviewView
 
   getMarkdownPreviewCSS: ->
     markdownPreviewRules = []
-    ruleRegExp = /\.markdown-preview/
-    cssUrlRegExp = /url\(atom:\/\/markdown-preview\/assets\/(.*)\)/
+    ruleRegExp = /\.markdown-preview-kramdown/
+    cssUrlRegExp = /url\(atom:\/\/markdown-preview-kramdown\/assets\/(.*)\)/
 
     for stylesheet in @getDocumentStyleSheets()
       if stylesheet.rules?
@@ -342,7 +342,7 @@ class MarkdownPreviewView
                 <title>#{title}</title>
                 <style>#{@getMarkdownPreviewCSS()}</style>
             </head>
-            <body class='markdown-preview' data-use-github-style>#{htmlBody}</body>
+            <body class='markdown-preview-kramdown' data-use-github-style>#{htmlBody}</body>
           </html>""" + "\n" # Ensure trailing newline
 
         fs.writeFileSync(htmlFilePath, html)

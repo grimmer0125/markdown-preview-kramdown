@@ -1,37 +1,37 @@
 menu: [
   label: 'Packages'
   submenu: [
-    label: 'Markdown Preview'
+    label: 'Markdown Preview Kramdown'
     submenu: [
-      {label: 'Toggle Preview', command: 'markdown-preview:toggle'}
-      {label: 'Toggle Break on Single Newline', command: 'markdown-preview:toggle-break-on-single-newline'}
-      {label: 'Toggle GitHub Style', command: 'markdown-preview:toggle-github-style'}
+      {label: 'Toggle Preview', command: 'markdown-preview-kramdown:toggle'}
+      {label: 'Toggle Break on Single Newline', command: 'markdown-preview-kramdown:toggle-break-on-single-newline'}
+      {label: 'Toggle GitHub Style', command: 'markdown-preview-kramdown:toggle-github-style'}
     ]
   ]
 ]
 
 'context-menu':
-  '.markdown-preview': [
-    {label: 'Select All', command: 'markdown-preview:select-all'}
+  '.markdown-preview-kramdown': [
+    {label: 'Select All', command: 'markdown-preview-kramdown:select-all'}
     {label: 'Save As HTML\u2026', command: 'core:save-as'}
   ]
-  '.markdown-preview.has-selection': [
+  '.markdown-preview-kramdown.has-selection': [
     {label: 'Copy', command: 'core:copy'}
   ]
-  '.markdown-preview:not(.has-selection)': [
+  '.markdown-preview-kramdown:not(.has-selection)': [
     {label: 'Copy As HTML', command: 'core:copy'}
   ]
   '.tree-view .file .name[data-name$=\\.markdown]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.md]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mdown]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkd]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkdown]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.ron]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]
   '.tree-view .file .name[data-name$=\\.txt]':
-    [{label: 'Markdown Preview', command: 'markdown-preview:preview-file'}]
+    [{label: 'Markdown Preview', command: 'markdown-preview-kramdown:preview-file'}]

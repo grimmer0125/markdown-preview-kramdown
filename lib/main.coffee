@@ -13,7 +13,7 @@ module.exports =
     @disposables = new CompositeDisposable()
     @commandSubscriptions = new CompositeDisposable()
 
-    @disposables.add atom.config.observe 'markdown-preview.grammars', (grammars) =>
+    @disposables.add atom.config.observe 'markdown-preview-kramdown.grammars', (grammars) =>
       @commandSubscriptions.dispose()
       @commandSubscriptions = new CompositeDisposable()
 
@@ -21,19 +21,19 @@ module.exports =
       grammars = grammars.map (grammar) -> grammar.replace(/\./g, ' ')
       for grammar in grammars
         @commandSubscriptions.add atom.commands.add "atom-text-editor[data-grammar='#{grammar}']",
-          'markdown-preview:toggle': =>
+          'markdown-preview-kramdown:toggle': =>
             @toggle()
-          'markdown-preview:copy-html':
+          'markdown-preview-kramdown:copy-html':
             displayName: 'Markdown Preview: Copy HTML'
             didDispatch: => @copyHTML()
-          'markdown-preview:save-as-html':
+          'markdown-preview-kramdown:save-as-html':
             displayName: 'Markdown Preview: Save as HTML'
             didDispatch: => @saveAsHTML()
-          'markdown-preview:toggle-break-on-single-newline': ->
-            keyPath = 'markdown-preview.breakOnSingleNewline'
+          'markdown-preview-kramdown:toggle-break-on-single-newline': ->
+            keyPath = 'markdown-preview-kramdown.breakOnSingleNewline'
             atom.config.set(keyPath, not atom.config.get(keyPath))
-          'markdown-preview:toggle-github-style': ->
-            keyPath = 'markdown-preview.useGitHubStyle'
+          'markdown-preview-kramdown:toggle-github-style': ->
+            keyPath = 'markdown-preview-kramdown.useGitHubStyle'
             atom.config.set(keyPath, not atom.config.get(keyPath))
 
       return # Do not return the results of the for loop
@@ -41,11 +41,11 @@ module.exports =
     previewFile = @previewFile.bind(this)
     for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt']
       @disposables.add atom.commands.add ".tree-view .file .name[data-name$=\\.#{extension}]",
-        'markdown-preview:preview-file', previewFile
+        'markdown-preview-kramdown:preview-file', previewFile
 
     @disposables.add atom.workspace.addOpener (uriToOpen) =>
       [protocol, path] = uriToOpen.split('://')
-      return unless protocol is 'markdown-preview'
+      return unless protocol is 'markdown-preview-kramdown'
 
       try
         path = decodeURI(path)
@@ -74,13 +74,13 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
-    grammars = atom.config.get('markdown-preview.grammars') ? []
+    grammars = atom.config.get('markdown-preview-kramdown.grammars') ? []
     return unless editor.getGrammar().scopeName in grammars
 
     @addPreviewForEditor(editor) unless @removePreviewForEditor(editor)
 
   uriForEditor: (editor) ->
-    "markdown-preview://editor/#{editor.id}"
+    "markdown-preview-kramdown://editor/#{editor.id}"
 
   removePreviewForEditor: (editor) ->
     uri = @uriForEditor(editor)
@@ -96,7 +96,7 @@ module.exports =
     previousActivePane = atom.workspace.getActivePane()
     options =
       searchAllPanes: true
-    if atom.config.get('markdown-preview.openPreviewInSplitPane')
+    if atom.config.get('markdown-preview-kramdown.openPreviewInSplitPane')
       options.split = 'right'
     atom.workspace.open(uri, options).then (markdownPreviewView) ->
       if isMarkdownPreviewView(markdownPreviewView)
@@ -110,7 +110,7 @@ module.exports =
       @addPreviewForEditor(editor)
       return
 
-    atom.workspace.open "markdown-preview://#{encodeURI(filePath)}", searchAllPanes: true
+    atom.workspace.open "markdown-preview-kramdown://#{encodeURI(filePath)}", searchAllPanes: true
 
   copyHTML: ->
     editor = atom.workspace.getActiveTextEditor()
@@ -133,7 +133,7 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
-    grammars = atom.config.get('markdown-preview.grammars') ? []
+    grammars = atom.config.get('markdown-preview-kramdown.grammars') ? []
     return unless editor.getGrammar().scopeName in grammars
 
     uri = @uriForEditor(editor)
