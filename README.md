@@ -31,6 +31,10 @@ Tested platforms:
 * Ubuntu 16.04
 * win10 enterprise 64
 
+## When you upgrade to a new version of Atom, this package might need to be rebuilt
+
+https://flight-manual.atom.io/hacking-atom/sections/debugging/#check-for-incompatible-packages
+
 ## Development from source code
 
 Besides the normal procedure (create a symbolic link of the git folder in ~/.atom/dev/packages), the important thing is that this package relies on some native binding library. So if you use your own `node+npm` to run `npm install`, it may result in some conflict with Atom's node. So please use Atom's built-in `node+npm` to install the node dependencies. Steps: `running Update Package Dependencies: Update` in Atom, ref: http://stackoverflow.com/questions/36810276/installing-package-dependencies-in-atom.  
