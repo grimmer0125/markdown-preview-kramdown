@@ -1,26 +1,23 @@
 {
-  "name": "markdown-preview",
-  "version": "0.158.1",
+  "name": "markdown-preview-kramdown",
+  "version": "0.6.1",
   "main": "./lib/main",
-  "description": "Open a rendered version of the Markdown in the current editor with `ctrl-shift-m`.",
-  "repository": "https://github.com/atom/markdown-preview",
+  "description": "Kramdown (used by GitHub Pages) version of Markdown Preview",
+  "repository": "https://github.com/grimmer0125/markdown-preview-kramdown",
   "license": "MIT",
   "engines": {
     "atom": "*"
   },
   "dependencies": {
-    "atom-space-pen-views": "^2.0.0",
-    "cheerio": "0.15.0",
-    "fs-plus": "^2.0.0",
-    "grim": "^1.2.1",
-    "highlights": "1.4.0",
+    "dompurify": "^1.0.2",
+    "fs-plus": "^3.0.0",
+    "highlights": "^3.1.1",
     "roaster": "^1.2.1",
-    "temp": "^0.8.1",
-    "underscore-plus": "^1.0.0",
-    "wrench": "^1.5.0"
+    "underscore-plus": "^1.0.0"
   },
   "devDependencies": {
-    "coffeelint": "^1.9.7"
+    "coffeelint": "^1.9.7",
+    "temp": "^0.8.1"
   },
   "deserializers": {
     "MarkdownPreviewView": "createMarkdownPreviewView"
@@ -40,6 +37,11 @@
       "type": "boolean",
       "default": true,
       "description": "Open the preview in a split pane. If disabled, the preview is opened in a new tab in the same pane."
+    },
+    "allowUnsafeProtocols": {
+      "type": "boolean",
+      "default": false,
+      "description": "Allow HTML attributes to use protocols normally considered unsafe such as `file://` and absolute paths on Windows."
     },
     "grammars": {
       "type": "array",

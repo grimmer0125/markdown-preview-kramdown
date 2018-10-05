@@ -1,5 +1,5 @@
-url = require 'url'
 fs = require 'fs-plus'
+{CompositeDisposable} = require 'atom'
 
 MarkdownPreviewView = null
 renderer = null
@@ -10,32 +10,42 @@ isMarkdownPreviewView = (object) ->
 
 module.exports =
   activate: ->
-    if parseFloat(atom.getVersion()) < 1.7
-      atom.deserializers.add
-        name: 'MarkdownPreviewView'
-        deserialize: module.exports.createMarkdownPreviewView.bind(module.exports)
+    @disposables = new CompositeDisposable()
+    @commandSubscriptions = new CompositeDisposable()
 
-    atom.commands.add 'atom-workspace',
-      'markdown-preview:toggle': =>
-        @toggle()
-      'markdown-preview:copy-html': =>
-        @copyHtml()
-      'markdown-preview:toggle-break-on-single-newline': ->
-        keyPath = 'markdown-preview.breakOnSingleNewline'
-        atom.config.set(keyPath, not atom.config.get(keyPath))
+    @disposables.add atom.config.observe 'markdown-preview-kramdown.grammars', (grammars) =>
+      @commandSubscriptions.dispose()
+      @commandSubscriptions = new CompositeDisposable()
+
+      grammars ?= []
+      grammars = grammars.map (grammar) -> grammar.replace(/\./g, ' ')
+      for grammar in grammars
+        @commandSubscriptions.add atom.commands.add "atom-text-editor[data-grammar='#{grammar}']",
+          'markdown-preview-kramdown:toggle': =>
+            @toggle()
+          'markdown-preview-kramdown:copy-html':
+            displayName: 'Markdown Preview: Copy HTML'
+            didDispatch: => @copyHTML()
+          'markdown-preview-kramdown:save-as-html':
+            displayName: 'Markdown Preview: Save as HTML'
+            didDispatch: => @saveAsHTML()
+          'markdown-preview-kramdown:toggle-break-on-single-newline': ->
+            keyPath = 'markdown-preview-kramdown.breakOnSingleNewline'
+            atom.config.set(keyPath, not atom.config.get(keyPath))
+          'markdown-preview-kramdown:toggle-github-style': ->
+            keyPath = 'markdown-preview-kramdown.useGitHubStyle'
+            atom.config.set(keyPath, not atom.config.get(keyPath))
+
+      return # Do not return the results of the for loop
 
     previewFile = @previewFile.bind(this)
-    atom.commands.add '.tree-view .file .name[data-name$=\\.markdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.md]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkd]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.ron]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.txt]', 'markdown-preview:preview-file', previewFile
+    for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt']
+      @disposables.add atom.commands.add ".tree-view .file .name[data-name$=\\.#{extension}]",
+        'markdown-preview-kramdown:preview-file', previewFile
 
-    atom.workspace.addOpener (uriToOpen) =>
+    @disposables.add atom.workspace.addOpener (uriToOpen) =>
       [protocol, path] = uriToOpen.split('://')
-      return unless protocol is 'markdown-preview'
+      return unless protocol is 'markdown-preview-kramdown'
 
       try
         path = decodeURI(path)
@@ -46,6 +56,10 @@ module.exports =
         @createMarkdownPreviewView(editorId: path.substring(7))
       else
         @createMarkdownPreviewView(filePath: path)
+
+  deactivate: ->
+    @disposables.dispose()
+    @commandSubscriptions.dispose()
 
   createMarkdownPreviewView: (state) ->
     if state.editorId or fs.isFileSync(state.filePath)
@@ -60,13 +74,13 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
-    grammars = atom.config.get('markdown-preview.grammars') ? []
+    grammars = atom.config.get('markdown-preview-kramdown.grammars') ? []
     return unless editor.getGrammar().scopeName in grammars
 
     @addPreviewForEditor(editor) unless @removePreviewForEditor(editor)
 
   uriForEditor: (editor) ->
-    "markdown-preview://editor/#{editor.id}"
+    "markdown-preview-kramdown://editor/#{editor.id}"
 
   removePreviewForEditor: (editor) ->
     uri = @uriForEditor(editor)
@@ -82,7 +96,7 @@ module.exports =
     previousActivePane = atom.workspace.getActivePane()
     options =
       searchAllPanes: true
-    if atom.config.get('markdown-preview.openPreviewInSplitPane')
+    if atom.config.get('markdown-preview-kramdown.openPreviewInSplitPane')
       options.split = 'right'
     atom.workspace.open(uri, options).then (markdownPreviewView) ->
       if isMarkdownPreviewView(markdownPreviewView)
@@ -96,9 +110,9 @@ module.exports =
       @addPreviewForEditor(editor)
       return
 
-    atom.workspace.open "markdown-preview://#{encodeURI(filePath)}", searchAllPanes: true
+    atom.workspace.open "markdown-preview-kramdown://#{encodeURI(filePath)}", searchAllPanes: true
 
-  copyHtml: ->
+  copyHTML: ->
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
@@ -109,3 +123,22 @@ module.exports =
         console.warn('Copying Markdown as HTML failed', error)
       else
         atom.clipboard.write(html)
+
+  saveAsHTML: ->
+    activePaneItem = atom.workspace.getActivePaneItem()
+    if isMarkdownPreviewView(activePaneItem)
+      atom.workspace.getActivePane().saveItemAs(activePaneItem)
+      return
+
+    editor = atom.workspace.getActiveTextEditor()
+    return unless editor?
+
+    grammars = atom.config.get('markdown-preview-kramdown.grammars') ? []
+    return unless editor.getGrammar().scopeName in grammars
+
+    uri = @uriForEditor(editor)
+    markdownPreviewPane = atom.workspace.paneForURI(uri)
+    markdownPreviewPaneItem = markdownPreviewPane?.itemForURI(uri)
+
+    if isMarkdownPreviewView(markdownPreviewPaneItem)
+      markdownPreviewPane.saveItemAs(markdownPreviewPaneItem)
